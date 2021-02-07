@@ -22,4 +22,16 @@ jobs:
       run: go build -v ./...
 
     - name: Test
-      run: go test -v ./...
+      run: go test -v ./... -covermode=count -coverprofile=coverage.out
+
+    - name: Prepare gcov2lcov
+      run: go get -u github.com/jandelgado/gcov2lcov
+
+    - name: Converting cover files
+      run: gcov2lcov -infile=coverage.out -outfile=coverage.lcov
+
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.1.2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ./coverage.lcov
