@@ -23,7 +23,11 @@ func init() {
 	}
 
 	router = gin.Default()
-	initAPI(router.Group("api"))
+	authorizator := func(c *gin.Context) {
+		log.Println("requested auth")
+		c.Next()
+	}
+	initAPI(router.Group("api"), authorizator)
 
 	// prepare the db
 	db.AutoMigrate(&User{})
