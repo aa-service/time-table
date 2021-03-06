@@ -1,18 +1,19 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 var db *gorm.DB
+var router *gin.Engine
 
-// Useful consts
-const (
-	APIVs = "v1"
-)
+const defaultPort = "8080"
 
 func init() {
 	var err error
@@ -21,6 +22,9 @@ func init() {
 		panic("failed to connect database")
 	}
 
+	router = gin.Default()
+	initAPI(router.Group("api"))
+
 	// prepare the db
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Event{})
@@ -28,5 +32,13 @@ func init() {
 }
 
 func main() {
-	APIListen(os.Getenv("PORT"))
+	log.Fatal(router.Run(getPort()))
+}
+
+func getPort() string {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = defaultPort
+	}
+	return fmt.Sprintf(":%s", port)
 }
