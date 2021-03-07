@@ -6,16 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Api struct {
-	router  *gin.RouterGroup
-	options *options.Options
-}
-
-func New(router *gin.RouterGroup, opts *options.Options) (*Api, error) {
-	// NewV1(router.Group("v1"), auth)
-	api := &Api{router, opts}
-	//
+func New(router *gin.RouterGroup, opts *options.Options) {
 	v1.New(router.Group("v1"), opts)
-	//
-	return api, nil
 }

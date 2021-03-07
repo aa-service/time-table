@@ -26,6 +26,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+
 	api.New(router.Group("api"), options)
 }
 

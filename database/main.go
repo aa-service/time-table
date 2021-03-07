@@ -13,7 +13,7 @@ func New(url string, debug bool) *gorm.DB {
 	}
 
 	// prepare the db
-	db.AutoMigrate(
+	_ = db.AutoMigrate(
 		&models.User{},
 		&models.Event{},
 		&models.UserToken{},
