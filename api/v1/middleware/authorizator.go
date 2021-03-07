@@ -29,7 +29,13 @@ func Auth(opts *options.Options) gin.HandlerFunc {
 			Find(&uToken)
 
 		if result.Error != nil || result.RowsAffected == 0 {
-			c.JSON(http.StatusUnauthorized, result.Error.Error())
+			c.JSON(
+				http.StatusUnauthorized,
+				gin.H{
+					"status": "ko",
+					"error":  "unauthorized",
+				},
+			)
 			c.Abort()
 			return
 		}
@@ -40,7 +46,10 @@ func Auth(opts *options.Options) gin.HandlerFunc {
 			Find(&user)
 
 		if result.Error != nil || result.RowsAffected == 0 {
-			c.JSON(http.StatusUnauthorized, result.Error.Error())
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"status": "ko",
+				"error":  "unauthorized",
+			})
 			c.Abort()
 			return
 		}
