@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/aa-service/time-table/models"
@@ -15,11 +14,8 @@ type header struct {
 
 func Auth(opts *options.Options) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Println("requested auth")
-
 		var hdr header
 		if err := c.ShouldBindHeader(&hdr); err != nil || hdr.Token == "" {
-			log.Println("no auth header :/")
 			c.JSON(http.StatusUnauthorized, err)
 			c.Abort()
 			return
@@ -33,7 +29,6 @@ func Auth(opts *options.Options) gin.HandlerFunc {
 			Find(&uToken)
 
 		if result.Error != nil || result.RowsAffected == 0 {
-			log.Println("no auth header :/")
 			c.JSON(http.StatusUnauthorized, result.Error.Error())
 			c.Abort()
 			return
@@ -45,14 +40,12 @@ func Auth(opts *options.Options) gin.HandlerFunc {
 			Find(&user)
 
 		if result.Error != nil || result.RowsAffected == 0 {
-			log.Println("no auth header :/")
 			c.JSON(http.StatusUnauthorized, result.Error.Error())
 			c.Abort()
 			return
 		}
 
 		c.Set("user", user)
-
 		c.Next()
 	}
 }
