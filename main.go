@@ -5,6 +5,9 @@ import (
 	"log"
 	"os"
 
+	"github.com/aa-service/time-table/api"
+	"github.com/aa-service/time-table/models"
+	"github.com/aa-service/time-table/options"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -23,16 +26,21 @@ func init() {
 	}
 
 	router = gin.Default()
-	authorizator := func(c *gin.Context) {
+	authorizator := gin.HandlerFunc(func(c *gin.Context) {
 		log.Println("requested auth")
 		c.Next()
+	})
+	// initAPI(router.Group("api"), authorizator)
+	options, err := options.New(authorizator, db)
+	if err != nil {
+		panic(err)
 	}
-	initAPI(router.Group("api"), authorizator)
+	api.New(router.Group("api"), options)
 
 	// prepare the db
-	db.AutoMigrate(&User{})
-	db.AutoMigrate(&Event{})
-	db.AutoMigrate(&UserToken{})
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Event{})
+	db.AutoMigrate(&models.UserToken{})
 }
 
 func main() {
