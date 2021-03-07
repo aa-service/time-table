@@ -9,9 +9,9 @@ import (
 // Event contains event data
 type Event struct {
 	gorm.Model
-	UUID string `gorm:"index,unique"`
-	User User
-	Day  byte
-	Time time.Time
-	Name string
+	UUID   string `gorm:"index,unique"`
+	UserID uint
+	Day    byte
+	Time   time.Time
+	Name   string
 }

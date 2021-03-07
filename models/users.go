@@ -7,9 +7,10 @@ import (
 // User contains the user data
 type User struct {
 	gorm.Model
-	Email string `gorm:"uniqueIndex" json:"email"`
-	UUID  string `gorm:"uniqueIndex" json:"uuid"`
-	Name  string `json:"name"`
-	TZ    string `json:"tz"`
-	// UserTokens []UserToken
+	Email  string `gorm:"uniqueIndex" json:"email"`
+	UUID   string `gorm:"uniqueIndex" json:"uuid"`
+	Name   string `json:"name"`
+	TZ     string `json:"tz"`
+	Tokens []UserToken
+	Events []Event
 }
