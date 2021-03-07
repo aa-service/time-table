@@ -11,9 +11,9 @@ import (
 func get(opts *options.Options) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		if uuid := c.GetString("uuid"); uuid == "" {
+		if uuid := c.GetString("uuid"); uuid != "" {
 			// return uuid only
-			var event models.User
+			var event models.Event
 			// todo: get events only for current user
 			result := opts.DB().First(&event, "UUID = ?", uuid)
 			//
@@ -35,10 +35,18 @@ func get(opts *options.Options) gin.HandlerFunc {
 					"data":   event,
 				},
 			)
+			return
 		}
 
 		//
-		// result := opts.DB()
-		c.JSON(http.StatusOK, gin.H{"status": "getting events"})
+		var events []models.Event
+		_ = opts.DB().Find(&events)
+		c.JSON(
+			http.StatusOK,
+			gin.H{
+				"status": "ok",
+				"data":   events,
+			},
+		)
 	}
 }

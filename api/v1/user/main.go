@@ -5,8 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Mount(router *gin.RouterGroup, opts *options.Options) {
+func Mount(
+	router *gin.RouterGroup,
+	opts *options.Options,
+	auth gin.HandlerFunc,
+) {
 	router.POST("/", post(opts))
-	router.GET("/:uuid", opts.Authorizator(), get(opts))
-	router.DELETE("/:uuid", opts.Authorizator(), delete(opts))
+	router.POST("/login", login(opts))
+	router.GET("/:uuid", auth, get(opts))
+	router.DELETE("/:uuid", auth, delete(opts))
 }

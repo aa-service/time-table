@@ -1,4 +1,4 @@
-package user
+package event
 
 import (
 	"net/http"
@@ -12,7 +12,7 @@ func delete(opts *options.Options) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		result := opts.DB().
 			Unscoped().
-			Delete(models.User{}, "uuid = ?", c.MustGet("uuid"))
+			Delete(models.Event{}, "uuid = ?", c.MustGet("uuid"))
 
 		if result.Error != nil || result.RowsAffected == 0 {
 			c.JSON(

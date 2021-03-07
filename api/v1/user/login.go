@@ -9,9 +9,10 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-func post(opts *options.Options) gin.HandlerFunc {
+func login(opts *options.Options) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user models.User
+		var uToken models.UserToken
 
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -21,23 +22,30 @@ func post(opts *options.Options) gin.HandlerFunc {
 			return
 		}
 
-		user.UUID = uuid.NewV4().String()
+		result := opts.DB().First(&user)
 
-		result := opts.DB().Create(&user)
-		if result.Error != nil {
+		if result.Error != nil || result.RowsAffected == 0 {
 			c.JSON(
-				http.StatusBadRequest,
+				http.StatusNotFound,
 				gin.H{
 					"status": "ko",
-					"error":  result.Error.Error(),
+					"error":  "not found",
 				},
 			)
 			return
 		}
 
+		// create new token
+		uToken.Token = uuid.NewV4().String()
+		uToken.UserID = user.ID
+
+		// set token to user
+		opts.DB().Create(&uToken)
+
+		// print token
 		c.JSON(http.StatusOK, gin.H{
 			"status": "ok",
-			"data":   user.UUID,
+			"data":   uToken.Token,
 		})
 	}
 }
