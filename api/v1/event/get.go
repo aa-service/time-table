@@ -10,7 +10,6 @@ import (
 
 func get(opts *options.Options) gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		if uuid := c.GetString("uuid"); uuid != "" {
 			// return uuid only
 			var event models.Event

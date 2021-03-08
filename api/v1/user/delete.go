@@ -6,15 +6,20 @@ import (
 	"github.com/aa-service/time-table/models"
 	"github.com/aa-service/time-table/options"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func delete(opts *options.Options) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		result := opts.DB().
-			Unscoped().
-			Delete(models.User{}, "uuid = ?", c.MustGet("uuid"))
+		var result *gorm.DB
 
-		if result.Error != nil || result.RowsAffected == 0 {
+		if uuid := c.GetString("uuid"); uuid != "" {
+			result = opts.DB().
+				Unscoped().
+				Delete(models.User{}, "uuid = ?", uuid)
+		}
+
+		if result == nil || result.Error != nil || result.RowsAffected == 0 {
 			c.JSON(
 				http.StatusNotFound,
 				gin.H{

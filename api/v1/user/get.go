@@ -6,14 +6,19 @@ import (
 	"github.com/aa-service/time-table/models"
 	"github.com/aa-service/time-table/options"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func get(opts *options.Options) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user models.User
-		result := opts.DB().First(&user, "UUID = ?", c.MustGet("uuid"))
+		var result *gorm.DB
 
-		if result.Error != nil || result.RowsAffected == 0 {
+		if uuid := c.GetString("uuid"); uuid != "" {
+			result = opts.DB().First(&user, "UUID = ?", uuid)
+		}
+
+		if result == nil || result.Error != nil || result.RowsAffected == 0 {
 			c.JSON(
 				http.StatusNotFound,
 				gin.H{
