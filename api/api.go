@@ -6,6 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func New(router *gin.RouterGroup, opts *options.Options) {
-	v1.New(router.Group("v1"), opts)
+func Mount(router *gin.RouterGroup, opts *options.Options) (groups map[string]*gin.RouterGroup) {
+	groups = map[string]*gin.RouterGroup{
+		"v1": router.Group("v1"),
+	}
+	v1.Mount(groups["v1"], opts)
+	//
+	return
 }

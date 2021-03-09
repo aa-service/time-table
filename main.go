@@ -27,7 +27,7 @@ func init() {
 		panic(err)
 	}
 
-	api.New(router.Group("api"), options)
+	_ = api.Mount(router.Group("api"), options)
 }
 
 func main() {

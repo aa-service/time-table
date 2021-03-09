@@ -8,12 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type V1 struct{}
-
-func New(router *gin.RouterGroup, options *options.Options) {
+func Mount(router *gin.RouterGroup, options *options.Options) (groups map[string]*gin.RouterGroup) {
+	groups = map[string]*gin.RouterGroup{
+		"user":  router.Group("/user"),
+		"event": router.Group("/event"),
+	}
+	//
 	router.Use(middleware.ChkUUID())
 	auth := middleware.Auth(options)
 	//
-	user.Mount(router.Group("/user"), options, auth)
-	event.Mount(router.Group("/event"), options, auth)
+	user.Mount(groups["user"], options, auth)
+	event.Mount(groups["event"], options, auth)
+	//
+	return
 }
