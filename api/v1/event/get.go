@@ -16,7 +16,7 @@ func get(opts *options.Options) gin.HandlerFunc {
 			// todo: get events only for current user
 			result := opts.DB().First(&event, "UUID = ?", uuid)
 			//
-			if result.Error != nil || result.RowsAffected == 0 {
+			if result.RowsAffected == 0 {
 				c.JSON(
 					http.StatusNotFound,
 					gin.H{

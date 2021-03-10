@@ -18,7 +18,7 @@ var router *gin.Engine
 const defaultPort = "8080"
 
 func init() {
-	db = database.New("database.db", true)
+	db = database.New("database.db", database.ModeDebug)
 
 	router = gin.Default()
 	// initAPI(router.Group("api"), authorizator)

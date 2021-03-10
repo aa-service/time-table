@@ -21,7 +21,7 @@ var opts *options.Options
 const dbURL = "file:foobar?mode=memory&cache=shared"
 
 func init() {
-	db = database.New(dbURL, true)
+	db = database.New(dbURL, database.ModeDebug)
 	opts, _ = options.New(db)
 }
 

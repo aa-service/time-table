@@ -16,7 +16,7 @@ func post(opts *options.Options) gin.HandlerFunc {
 		if err := c.ShouldBindJSON(&event); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status": "ko",
-				"error":  err.Error(),
+				"error":  "bad request",
 			})
 			return
 		}
@@ -29,14 +29,14 @@ func post(opts *options.Options) gin.HandlerFunc {
 				http.StatusBadRequest,
 				gin.H{
 					"status": "ko",
-					"error":  result.Error.Error(),
+					"error":  "uuid duplicated",
 				},
 			)
 			return
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"status": "event created",
+			"status": "ok",
 			"data":   event.UUID,
 		})
 	}

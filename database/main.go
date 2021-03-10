@@ -6,7 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func New(url string, debug bool) *gorm.DB {
+const (
+	ModeNormal = 0
+	ModeDebug  = 1
+)
+
+func New(url string, mode int) *gorm.DB {
 	db, err := gorm.Open(sqlite.Open(url), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
@@ -19,7 +24,7 @@ func New(url string, debug bool) *gorm.DB {
 		&models.UserToken{},
 	)
 
-	if debug {
+	if mode == ModeDebug {
 		return db.Debug()
 	}
 
