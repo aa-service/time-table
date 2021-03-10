@@ -17,14 +17,14 @@ func login(opts *options.Options) gin.HandlerFunc {
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status": "ko",
-				"error":  err.Error(),
+				"error":  "bad request",
 			})
 			return
 		}
 
 		result := opts.DB().First(&user)
 
-		if result.Error != nil || result.RowsAffected == 0 {
+		if result.RowsAffected == 0 {
 			c.JSON(
 				http.StatusNotFound,
 				gin.H{

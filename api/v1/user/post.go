@@ -16,7 +16,7 @@ func post(opts *options.Options) gin.HandlerFunc {
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"status": "ko",
-				"error":  err.Error(),
+				"error":  "bad request",
 			})
 			return
 		}
@@ -29,7 +29,7 @@ func post(opts *options.Options) gin.HandlerFunc {
 				http.StatusBadRequest,
 				gin.H{
 					"status": "ko",
-					"error":  result.Error.Error(),
+					"error":  "bad request",
 				},
 			)
 			return

@@ -19,7 +19,7 @@ func delete(opts *options.Options) gin.HandlerFunc {
 				Delete(models.User{}, "uuid = ?", uuid)
 		}
 
-		if result == nil || result.Error != nil || result.RowsAffected == 0 {
+		if result == nil || result.RowsAffected == 0 {
 			c.JSON(
 				http.StatusNotFound,
 				gin.H{

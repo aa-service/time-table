@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	ModeNormal = 0
-	ModeDebug  = 1
+	ModeDefault = 0
+	ModeDebug   = 1
 )
 
 func New(url string, mode int) *gorm.DB {
